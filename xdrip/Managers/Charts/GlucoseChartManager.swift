@@ -89,7 +89,8 @@ public final class GlucoseChartManager {
     
     /// - the maximum value in glucoseChartPoints array between start and endPoint
     /// - the value will never get smaller during the run time of the app
-    private var maximumValueInGlucoseChartPoints:Double = ConstantsGlucoseChart.absoluteMinimumChartValueInMgdl.mgdlToMmol(mgdl: UserDefaults.standard.bloodGlucoseUnitIsMgDl)
+    /// - in mgdl
+    private var maximumValueInGlucoseChartPointsInMgDl: Double = ConstantsGlucoseChart.absoluteMinimumChartValueInMgdl
     
     /// - if glucoseChartPoints.count > 0, then this is the latest one that has timestamp less than endDate.
     private(set) var lastChartPointEarlierThanEndDate: ChartPoint?
@@ -180,7 +181,7 @@ public final class GlucoseChartManager {
                     self.lastChartPointEarlierThanEndDate = newGlucoseChartPointsToAppend.lastGlucoseChartPoint
 
                     // maybe there's a higher value now
-                    self.maximumValueInGlucoseChartPoints = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPoints, glucoseChartPoints: newGlucoseChartPointsToAppend)
+                    self.maximumValueInGlucoseChartPointsInMgDl = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPointsInMgDl, glucoseChartPoints: newGlucoseChartPointsToAppend)
                     
                 } else if endDate <= lastGlucoseTimeStamp {
                     // so starDate <= date of last known glucosechartpoint and enddate is also <= that date
@@ -190,7 +191,7 @@ public final class GlucoseChartManager {
                     self.lastChartPointEarlierThanEndDate = lastGlucoseChartPoint
                     
                     // maybe there's a higher value now for maximumValueInGlucoseChartPoints
-                    self.maximumValueInGlucoseChartPoints = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPoints, glucoseChartPoints: newGlucoseChartPointsToAppend)
+                    self.maximumValueInGlucoseChartPointsInMgDl = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPointsInMgDl, glucoseChartPoints: newGlucoseChartPointsToAppend)
                     
                 } else {
                     
@@ -201,7 +202,7 @@ public final class GlucoseChartManager {
                     self.lastChartPointEarlierThanEndDate = newGlucoseChartPointsToAppend.lastGlucoseChartPoint
                     
                     // maybe there's a higher value now for maximumValueInGlucoseChartPoints
-                    self.maximumValueInGlucoseChartPoints = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPoints, glucoseChartPoints: newGlucoseChartPointsToAppend)
+                    self.maximumValueInGlucoseChartPointsInMgDl = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPointsInMgDl, glucoseChartPoints: newGlucoseChartPointsToAppend)
 
                 }
                 
@@ -214,7 +215,7 @@ public final class GlucoseChartManager {
                         newGlucoseChartPointsToPrepend = self.getGlucoseChartPoints(startDate: startDateToUse, endDate: firstGlucoseChartPointX.date, bgReadingsAccessor: self.data().bgReadingsAccessor, on: managedObjectContext)
                         
                         // maybe there's a higher value now for maximumValueInGlucoseChartPoints
-                        self.maximumValueInGlucoseChartPoints = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPoints, glucoseChartPoints: newGlucoseChartPointsToPrepend)
+                        self.maximumValueInGlucoseChartPointsInMgDl = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPointsInMgDl, glucoseChartPoints: newGlucoseChartPointsToPrepend)
 
                     }
                     
@@ -231,7 +232,7 @@ public final class GlucoseChartManager {
                 self.lastChartPointEarlierThanEndDate = newGlucoseChartPointsToAppend.lastGlucoseChartPoint
                 
                 // maybe there's a higher value now for maximumValueInGlucoseChartPoints
-                self.maximumValueInGlucoseChartPoints = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPoints, glucoseChartPoints: newGlucoseChartPointsToAppend)
+                self.maximumValueInGlucoseChartPointsInMgDl = self.getNewMaximumValueInGlucoseChartPoints(currentMaximumValueInGlucoseChartPoints: self.maximumValueInGlucoseChartPointsInMgDl, glucoseChartPoints: newGlucoseChartPointsToAppend)
 
             }
             
@@ -504,7 +505,7 @@ public final class GlucoseChartManager {
         }
         
         // if the maxium yAxisValue doesn't support the maximum glucose value, then add the next range
-        if yAxisValues.last!.scalar < maximumValueInGlucoseChartPoints {
+        if yAxisValues.last!.scalar < maximumValueInGlucoseChartPointsInMgDl.mgdlToMmol(mgdl: UserDefaults.standard.bloodGlucoseUnitIsMgDl) {
             if unitIsMgDl {
                 yAxisValues += ConstantsGlucoseChart.secondGlucoseValueRangeInMgDl.map { ChartAxisValueDouble($0, labelSettings: data().chartLabelSettings)}
             } else {
@@ -513,7 +514,7 @@ public final class GlucoseChartManager {
         }
         
         // if the maxium yAxisValue doesn't support the maximum glucose value, then add the next range
-        if yAxisValues.last!.scalar < maximumValueInGlucoseChartPoints {
+        if yAxisValues.last!.scalar < maximumValueInGlucoseChartPointsInMgDl.mgdlToMmol(mgdl: UserDefaults.standard.bloodGlucoseUnitIsMgDl) {
             if unitIsMgDl {
                 yAxisValues += ConstantsGlucoseChart.thirdGlucoseValueRangeInMgDl.map { ChartAxisValueDouble($0, labelSettings: data().chartLabelSettings)}
             } else {
