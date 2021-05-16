@@ -19,7 +19,7 @@ public class LoopManager:NSObject {
     private var bgReadingsAccessor:BgReadingsAccessor
     
     /// shared UserDefaults to publish data
-    private let sharedUserDefaults = UserDefaults(suiteName: Bundle.main.appGroupSuiteName)
+    private let sharedUserDefaults = UserDefaults(suiteName: "group.com.777258T3K8.loopkit.LoopGroup")
     
     // MARK: - initializer
     

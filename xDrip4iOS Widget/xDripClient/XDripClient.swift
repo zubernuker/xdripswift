@@ -21,7 +21,7 @@ public class XDripClient {
     public let shared: UserDefaults?
     
     public init(_ group: String? = Bundle.main.appGroupSuiteName) {
-        shared = UserDefaults(suiteName: group)
+        shared = UserDefaults(suiteName: "group.com.777258T3K8.loopkit.LoopGroup")
     }
     
     public func fetchLast(_ n: Int, callback: @escaping (ClientError?, [Glucose]?) -> Void) {
