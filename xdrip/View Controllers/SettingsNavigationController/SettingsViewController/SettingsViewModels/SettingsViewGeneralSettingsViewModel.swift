@@ -152,14 +152,14 @@ class SettingsViewGeneralSettingsViewModel: SettingsViewModelProtocol {
         case .showReadingInNotification:
             return Texts_SettingsView.showReadingInNotification
             
+        case .notificationInterval:
+            return Texts_SettingsView.settingsviews_IntervalTitle
+            
         case .showReadingInAppBadge:
             return Texts_SettingsView.labelShowReadingInAppBadge
             
         case .multipleAppBadgeValueWith10:
             return Texts_SettingsView.multipleAppBadgeValueWith10
-            
-        case .notificationInterval:
-            return Texts_SettingsView.settingsviews_IntervalTitle
             
         }
     }

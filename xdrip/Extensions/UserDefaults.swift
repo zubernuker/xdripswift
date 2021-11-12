@@ -21,22 +21,27 @@ extension UserDefaults {
         
         // General
         
-        /// bloodglucose  unit
+        /// bloodglucose unit
         case bloodGlucoseUnitIsMgDl = "bloodGlucoseUnit"
         /// urgent high value
         case isMaster = "isMaster"
+        /// should the online help by automatically translated?
+        case translateOnlineHelp = "translateOnlineHelp"
         /// should notification be shown with reading yes or no
         case showReadingInNotification = "showReadingInNotification"
         /// should readings be shown in app badge yes or no
         case showReadingInAppBadge = "showReadingInAppBadge"
         /// should reading by multiplied by 10
         case multipleAppBadgeValueWith10 = "multipleAppBadgeValueWith10"
-        
         /// minimum time between two notifications, set by user
         case notificationInterval = "notificationInterval"
         
         // Home Screen and main chart settings
         
+        /// should the screen/chart be allowed to rotate?
+        case allowScreenRotation = "allowScreenRotation"
+        /// should the clock view be shown when the screen is locked?
+        case showClockWhenScreenIsLocked = "showClockWhenScreenIsLocked"
         /// show the objectives and make them display on the graph? Or just hide it all because it's too complicated to waste time with?
         case useObjectives = "useObjectives"
         /// show the objective lines in color or grey?
@@ -62,6 +67,16 @@ extension UserDefaults {
         case useIFCCA1C = "useIFCCA1C"
         /// use the "standard" range of 70-180mg/dl to calculate the statistics?
         case useStandardStatisticsRange = "useStandardStatisticsRange"
+        
+        // Sensor Countdown settings
+        
+        /// show the sensor countdown graphic where applicable?
+        case showSensorCountdown = "showSensorCountdown"
+        /// does the user prefer the alternative "count up" graphics?
+        case showSensorCountdownAlternativeGraphics = "showSensorCountdownAlternativeGraphics"
+        /// store the max sensor age in days if applicable to the active sensor type
+        case maxSensorAgeInDays = "maxSensorAgeInDays"
+        
         
         // Transmitter
         
@@ -129,6 +144,9 @@ extension UserDefaults {
         
         /// license info accepted by user yes or no
         case licenseInfoAccepted = "licenseInfoAccepted"
+        
+        /// used to allow the user to dismiss the lock screen warning forever
+        case lockScreenDontShowAgain = "lockScreenDontShowAgain"
         
         // M5Stack
         
@@ -309,6 +327,17 @@ extension UserDefaults {
         }
     }
     
+    /// should the app automatically show the translated version of the online help if English (en) is not the selected app locale?
+    @objc dynamic var translateOnlineHelp: Bool {
+        // default value for bool in userdefaults is false, as default we want the app to translate automatically
+        get {
+            return !bool(forKey: Key.translateOnlineHelp.rawValue)
+        }
+        set {
+            set(!newValue, forKey: Key.translateOnlineHelp.rawValue)
+        }
+    }
+    
     /// should notification be shown with reading yes or no
     @objc dynamic var showReadingInNotification: Bool {
         // default value for bool in userdefaults is false, as default we want readings to be shown
@@ -412,7 +441,6 @@ extension UserDefaults {
         }
         
     }
-
     
     /// the targetvalue in unit selected by user ie, mgdl or mmol
     @objc dynamic var targetMarkValueInUserChosenUnit:Double {
@@ -631,6 +659,28 @@ extension UserDefaults {
         }
     }
     
+    /// should the home screen be allowed to rotate to show a landscape glucose chart?
+    @objc dynamic var allowScreenRotation: Bool {
+        // default value for bool in userdefaults is false, as default we want the chart to be able to rotate and show the 24hr view
+        get {
+            return !bool(forKey: Key.allowScreenRotation.rawValue)
+        }
+        set {
+            set(!newValue, forKey: Key.allowScreenRotation.rawValue)
+        }
+    }
+    
+    /// should the clock view be shown when the screen is locked?
+    @objc dynamic var showClockWhenScreenIsLocked: Bool {
+        // default value for bool in userdefaults is false, as default we want the clock to show when the screen is locked
+        get {
+            return !bool(forKey: Key.showClockWhenScreenIsLocked.rawValue)
+        }
+        set {
+            set(!newValue, forKey: Key.showClockWhenScreenIsLocked.rawValue)
+        }
+    }
+    
     // MARK: Statistics Settings
     
     
@@ -674,6 +724,31 @@ extension UserDefaults {
         }
         set {
             set(newValue, forKey: Key.useStandardStatisticsRange.rawValue)
+        }
+    }
+    
+    
+    // MARK: Sensor Countdown Settings
+    
+    /// should the countdown graphic be shown in the applicable for the sensor type being used?
+    @objc dynamic var showSensorCountdown: Bool {
+        // default value for bool in userdefaults is false, as default we want the sensor countdown to show when a compatible sensor is started
+        get {
+            return !bool(forKey: Key.showSensorCountdown.rawValue)
+        }
+        set {
+            set(!newValue, forKey: Key.showSensorCountdown.rawValue)
+        }
+    }
+    
+    /// does the user prefer to use the alternative countdown graphic? This would show a "count-up" and not the standard "count-down"
+    @objc dynamic var showSensorCountdownAlternativeGraphics: Bool {
+        // default value for bool in userdefaults is false, as default we want the show the normal countdown graphics so leave as false
+        get {
+            return bool(forKey: Key.showSensorCountdownAlternativeGraphics.rawValue)
+        }
+        set {
+            set(newValue, forKey: Key.showSensorCountdownAlternativeGraphics.rawValue)
         }
     }
     
@@ -942,6 +1017,16 @@ extension UserDefaults {
         }
     }
     
+    /// did the user ask to not show the lock screen warning dialog again?
+    var lockScreenDontShowAgain:Bool {
+        get {
+            return bool(forKey: Key.lockScreenDontShowAgain.rawValue)
+        }
+        set {
+            set(newValue, forKey: Key.lockScreenDontShowAgain.rawValue)
+        }
+    }
+    
     // MARK: M5Stack
 
     /// M5StackBlePassword, used for authenticating xdrip app towards M5Stack
@@ -1194,6 +1279,17 @@ extension UserDefaults {
         }
         set {
             set(newValue, forKey: Key.timeStampLatestDexcomShareUploadedBgReading.rawValue)
+        }
+    }
+    
+    
+    /// store the maximum sensor life if applicable
+    var maxSensorAgeInDays: Int {
+        get {
+            return integer(forKey: Key.maxSensorAgeInDays.rawValue)
+        }
+        set {
+            set(newValue, forKey: Key.maxSensorAgeInDays.rawValue)
         }
     }
     

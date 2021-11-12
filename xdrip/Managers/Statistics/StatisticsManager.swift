@@ -14,7 +14,7 @@ public final class StatisticsManager {
     // MARK: - private properties
     
     /// BgReadingsAccessor instance
-    private var bgReadingsAccessor:BgReadingsAccessor?
+    private var bgReadingsAccessor:BgReadingsAccessor
     
     /// used for calculating statistics on a background thread
     private let operationQueue: OperationQueue
@@ -29,7 +29,7 @@ public final class StatisticsManager {
         // set coreDataManager and bgReadingsAccessor
         self.coreDataManager = coreDataManager
         self.bgReadingsAccessor = BgReadingsAccessor(coreDataManager: coreDataManager)
-        
+
         // initialize operationQueue
         operationQueue = OperationQueue()
         
@@ -53,11 +53,6 @@ public final class StatisticsManager {
                 return
             }
             
-            // intialize private managed object context
-            let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            
-            managedObjectContext.parent = self.coreDataManager.mainManagedObjectContext
-            
             // declare variables/constants
             let isMgDl: Bool = UserDefaults.standard.bloodGlucoseUnitIsMgDl
             var glucoseValues: [Double] = []
@@ -73,20 +68,15 @@ public final class StatisticsManager {
             var highLimitForTIR: Double = 0
             var numberOfDaysUsed: Int = 0
             
-            // initialize bgReadingsAccessor
-            let bgReadingsAccessor = BgReadingsAccessor(coreDataManager: self.coreDataManager)
-            
-            // lets get the readings from the bgReadingsAccessor
-            let readings = bgReadingsAccessor.getBgReadings(from: fromDate, to: toDate, on: managedObjectContext)
-            
-            //if there are no available readings, return without doing anything
-            if readings.count == 0 {
-                return
-            }
-            
-            // bgReadings array has been fetched from coredata using a private mangedObjectContext
-            // we need to use the same context to perform next piece of code which will use those bgReadings, in order to stay thread-safe
-            managedObjectContext.performAndWait {
+            self.coreDataManager.privateManagedObjectContext.performAndWait {
+
+                // lets get the readings from the bgReadingsAccessor
+                let readings = self.bgReadingsAccessor.getBgReadings(from: fromDate, to: toDate, on: self.coreDataManager.privateManagedObjectContext)
+                
+                //if there are no available readings, return without doing anything
+                if readings.count == 0 {
+                    return
+                }
                 
                 // let's calculate the actual first day of readings in bgReadings. Although the user wants to use 60 days to calculate, maybe we only have 4 days of data. This will be returned from the method and used in the UI. To ensure we calculate the whole days used, we should subtract 5 minutes from the fromDate
                 numberOfDaysUsed = Calendar.current.dateComponents([.day], from: readings.first!.timeStamp - 5 * 60, to: Date()).day!
@@ -146,42 +136,56 @@ public final class StatisticsManager {
                     highLimitForTIR = UserDefaults.standard.highMarkValueInUserChosenUnit
                 }
                 
-                
-                // calculate low %
-                lowStatisticValue = Double((glucoseValues.lazy.filter { $0 < lowLimitForTIR }.count * 200) / (glucoseValues.count * 2))
-                
-                
-                // calculate high %
-                highStatisticValue = Double((glucoseValues.lazy.filter { $0 > highLimitForTIR }.count * 200) / (glucoseValues.count * 2))
+                // make sure that there exist elements in the glucoseValue array before trying to process statistics calculations or we could get a fatal divide by zero error/crash
+                if glucoseValues.count > 0 {
+                    
+                    // calculate low %
+                    lowStatisticValue = Double((glucoseValues.lazy.filter { $0 < lowLimitForTIR }.count * 200) / (glucoseValues.count * 2))
                 
                 
-                // calculate TIR % (let's be lazy and just subtract the other two values from 100)
-                inRangeStatisticValue = 100 - lowStatisticValue - highStatisticValue
+                    // calculate high %
+                    highStatisticValue = Double((glucoseValues.lazy.filter { $0 > highLimitForTIR }.count * 200) / (glucoseValues.count * 2))
+                    
+                    
+                    // calculate TIR % (let's be lazy and just subtract the other two values from 100)
+                    inRangeStatisticValue = 100 - lowStatisticValue - highStatisticValue
+                    
+                    
+                    // calculate average glucose value
+                    averageStatisticValue = Double(glucoseValues.reduce(0, +)) / Double(glucoseValues.count)
                 
+                    
+                    // calculate an estimated HbA1C value using either IFCC (e.g 49 mmol/mol) or NGSP (e.g 5.8%) methods: http://www.ngsp.org/ifccngsp.asp
+                    if UserDefaults.standard.useIFCCA1C {
+                        a1CStatisticValue = (((46.7 + Double(isMgDl ? averageStatisticValue : (averageStatisticValue / ConstantsBloodGlucose.mgDlToMmoll))) / 28.7) - 2.152) / 0.09148
+                    } else {
+                        a1CStatisticValue = (46.7 + Double(isMgDl ? averageStatisticValue : (averageStatisticValue / ConstantsBloodGlucose.mgDlToMmoll))) / 28.7
+                    }
+                    
+                    
+                    // calculate standard deviation (we won't show this but we need it to calculate CV)
+                    var sum: Double = 0;
+                    
+                    for glucoseValue in glucoseValues {
+                        sum += (Double(glucoseValue.value) - averageStatisticValue) * (Double(glucoseValue.value) - averageStatisticValue)
+                    }
+                    
+                    let stdDeviationStatisticValue: Double = sqrt(sum / Double(glucoseValues.count))
+                    
+                    
+                    // calculate Coeffecient of Variation
+                    cVStatisticValue = ((stdDeviationStatisticValue) / averageStatisticValue) * 100
                 
-                // calculate average glucose value
-                averageStatisticValue = Double(glucoseValues.reduce(0, +)) / Double(glucoseValues.count)
-                
-                
-                // calculate standard deviation (we won't show this but we need it to calculate CV)
-                var sum: Double = 0;
-                
-                for glucoseValue in glucoseValues {
-                    sum += (Double(glucoseValue.value) - averageStatisticValue) * (Double(glucoseValue.value) - averageStatisticValue)
-                }
-                
-                let stdDeviationStatisticValue: Double = sqrt(sum / Double(glucoseValues.count))
-                
-                
-                // calculate Coeffecient of Variation
-                cVStatisticValue = ((stdDeviationStatisticValue) / averageStatisticValue) * 100
-                
-                
-                // calculate an estimated HbA1C value using either IFCC (e.g 49 mmol/mol) or NGSP (e.g 5.8%) methods: http://www.ngsp.org/ifccngsp.asp
-                if UserDefaults.standard.useIFCCA1C {
-                    a1CStatisticValue = (((46.7 + Double(isMgDl ? averageStatisticValue : (averageStatisticValue / ConstantsBloodGlucose.mgDlToMmoll))) / 28.7) - 2.152) / 0.09148
                 } else {
-                    a1CStatisticValue = (46.7 + Double(isMgDl ? averageStatisticValue : (averageStatisticValue / ConstantsBloodGlucose.mgDlToMmoll))) / 28.7
+                
+                    // just assign a zero value to all statistics variables
+                    lowStatisticValue = 0
+                    highStatisticValue = 0
+                    inRangeStatisticValue = 0
+                    averageStatisticValue = 0
+                    cVStatisticValue = 0
+                    a1CStatisticValue = 0
+                
                 }
 
             }
@@ -218,6 +222,6 @@ public final class StatisticsManager {
         var numberOfDaysUsed: Int
         
     }
-    
+     
 }
 

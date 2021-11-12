@@ -23,7 +23,7 @@
 "sensorstart" = "Sensor gestartet";
 
 /// for home view, miaomiao doesn't detect a sensor
-"sensornotdetected" = "Der Sensor wurde nicht gefunden. Prüfen Sie den korrekten sitz des Transmitters im Sensor.";
+"sensornotdetected" = "Der Sensor wurde nicht gefunden. Prüfen Sie den korrekten Sitz des Transmitters im Sensor.";
 
 /// for home view, title of pop up that gives info about how to select the transmitter. Simply the word Info
 "info" = "Info";
@@ -41,7 +41,7 @@
 "scanbluetoothdeviceactiontitle" = "Transmitter scannen";
 
 /// for home view, Info how to start : set transmitter and id, then go back to home screen, start scanning
-"transmitterinfo" = "Bitte zuerst via Bluettoh einen Sensor bzw. Transmitter verbinden.\r\n\nDanach können Sie den Sensor hier starten.";
+"transmitterinfo" = "Bitte zuerst via Bluetooth einen Sensor bzw. Transmitter verbinden.\r\n\nDanach können Sie den Sensor hier starten.";
 
 /// when user manually starts scanning, this is the message that scanning is ongoing
 "scanbluetoothdeviceongoing" = "Suche nach Transmitter...";
@@ -56,7 +56,7 @@
 "failed" = "Fehlgeschlagen";
 
 /// when user manually starts sensor, this is the message that explains that time should be correct
-"startsensortimeinfo" = "Auf der nächsten Seite müßen Sie Zeit und Datum eingeben zu der der Sensor gestartet wurde. Es ist wichtig Zeit und Datum so genau wie möglich ein zu geben.";
+"startsensortimeinfo" = "Auf der nächsten Seite müssen Sie Zeit und Datum eingeben zu der der Sensor gestartet wurde. Es ist wichtig Zeit und Datum so genau wie möglich einzugeben.";
 
 /// for home view, where it say how old the reading is, 'x minutes ago', literaly translation of 'ago'
 "ago" = "her";
@@ -99,3 +99,8 @@
 
 /// for home view, license info
 "licenseinfo" = "This program is free software distributed under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.\r\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.\r\n\nSee http://www.gnu.org/licenses/gpl.txt for more details.\r\n\r\nInfo: ";
+
+"lock" = "Sperren";
+"unlock" = "Entsperren";
+"screenlocktitle" = "Bildschirmsperre aktiviert";
+"screenlockinfo" = "Dadurch bleibt der Bildschirm aktiviert, bis zu einer anderen App gewechselt wird oder entsperren geklickt wird.\r\n\nWir empfehlen, dass Handy mit dem Ladekabel zu verbinden, um ein Entladen des Akkus zu verhindern.";

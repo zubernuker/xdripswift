@@ -87,7 +87,7 @@
 "settingsviews_license" = "Lizenz";
 
 /// general settings, should reading be multiplied with 10 yes or no
-"multipleAppBadgeValueWith10" = "mit 10 multiplizieren?";
+"settingsviews_multipleAppBadgeValueWith10" = "mit 10 multiplizieren?";
 
 /// nightscout settings, pop up that asks user to enter nightscout api key
 "settingsviews_giveNightScoutAPIKey" = "API_SECRET Eingabe";
@@ -114,7 +114,7 @@
 "settingsviews_speakTrend" = "Trend vorlesen?";
 
 /// Apple Watch Settings - text in row where user needs to say if trend should be displayed or not
-"displayTrendInCalendarEvent" = "Trend anzeigen?";
+"settingsviews_displayTrendInCalendarEvent" = "Trend anzeigen?";
 
 /// If user is not allowed to give any app access to the Calendar, due to restrictions. And then tries to activate creation of events in calendar, this message will be shown
 "infoCalendarAccessRestricted" = "Richtlinien auf ihrem Gerät verhindern das Sie %@ Zugang zu ihrem Kalender geben.";
@@ -123,7 +123,7 @@
 "debugLevel" = "Debug Level hinzufügen";
 
 /// general settings, when switching from master to follower, if confirmation is asked, this message will be shown.
-"warningChangeFromMasterToFollower" = " Der wechsel von Master zu Follower beendet die aktuelle Verbindung zu ihrem Sensor.Möchten Sie dennoch wechseln?";
+"warningChangeFromMasterToFollower" = " Der Wechsel von Master zu Follower beendet die aktuelle Verbindung zu ihrem Sensor. Möchten Sie dennoch wechseln?";
 
 /// nightscout or dexcom share settings, where user can select to edit the schedule
 "schedule" = "Upload Plan:";
@@ -153,7 +153,7 @@
 "displayUnitInCalendarEvent" = "Einheiten anzeigen?";
 
 /// Text in pop up shown when user wants to send the trace file
-"describeProblem" = "Helfen Sie uns in dem sie uns so viele Innformationen als möglich mitteilen. Sollten Sie das Problem schon in unsere Facebook Gruppe gemeldet haben, teilen Sie uns bitte ihren Facebook Namen per Email mit.";
+"describeProblem" = "Helfen Sie uns in dem sie uns so viele Innformationen als möglich mitteilen. Sollten Sie das Problem schon in unsere Facebook Gruppe gemeldet haben, teilen Sie uns bitte ihren Facebook Namen per E-Mail mit.";
 
 /// dexcom share settings, pop up that asks user to enter dexcom share password
 "settingsviews_giveDexcomSharePassword" = "Eingabe Dexcom Share Passwort";
@@ -168,7 +168,7 @@
 "settingsviews_nightScoutEnabled" = "Nightscout aktivieren?";
 
 /// alerting settings, section title
-"settingsviews_sectiontitlealerting" = "Alarm";
+"settingsviews_sectiontitlealerting" = "Alarms";
 
 /// speak settings, where user can enable or disable speak readings
 "settingsviews_speakBgReadings" = "BZ Werte vorlesen?";
@@ -186,7 +186,7 @@
 "settingsviews_nightScoutAPIKey" = "API_SECRET:";
 
 /// user tries to send trace file but there's no native email account configured
-"emailNotConfigured" = "Sie müßen einen E-mail Konto auf ihrem Gerät aktiviert haben.";
+"emailNotConfigured" = "Sie müssen einen E-Mail Konto auf ihrem Gerät aktiviert haben.";
 
 /// transmitter settings, section title
 "settingsviews_sectiontitletransmitter" = "Transmitter";
@@ -207,10 +207,10 @@
 "transmitterId8OrHigherNotSupported" = "Transmitter mit der ID 8Gxxxx oder neuer werden zur Zeit nicht unterstützt!";
 
 /// M5 stack setting, brightness
-"m5stack_settingsviews_brightness" = "Bildschirm Helligkeit";
+"m5stack_settingsviews_brightness" = "Bildschirmhelligkeit";
 
 /// dexcom share settings, where user can set the dexcom share account name
-"settingsviews_dexcomShareAccountName" = "Benutzer Name:";
+"settingsviews_dexcomShareAccountName" = "Benutzername:";
 
 /// When clicking the interval setting, a pop up asks for minimum number of minutes between two readings, this is the pop up message - this is used for setting the interval between two readings in BG notifications, Speak readings, Apple Watch
 "settingsviews_IntervalMessage" = "Mindestabstand zwischen zwei Werten in Minuten";
@@ -219,13 +219,13 @@
 "m5stack_settingsviews_settingstitle" = "M5 Stack Einstellungen";
 
 /// In case user tries to send trace file via email but error occurs.
-"failedToSendEmail" = "Email senden fehlgeschlagen";
+"failedToSendEmail" = "E-Mail senden fehlgeschlagen";
 
 /// alerting settings, row alerts (thresholds)
 "settingsviews_row_alerts" = "Schwellwerte";
 
 /// general settings, should reading be shown in app badge yes or no
-"labelShowReadingInAppBadge" = "BZ Werte auf der App-Kachel anzeigen?";
+"settingsviews_labelShowReadingInAppBadge" = "BZ Werte auf der App-Kachel anzeigen?";
 
 /// home screen settings, low value
 "settingsviews_lowValue" = "Niedriger Wert:";
@@ -261,7 +261,7 @@
 "settingsviews_speakreadingslanguageselection" = "Sprache wählen";
 
 /// general settings, should reading be shown in notification yes or no
-"showReadingInNotification" = "BZ in Mitteilungszentrale?";
+"settingsviews_showReadingInNotification" = "BZ in Mitteilungszentrale?";
 
 /// dexcom share settings, where user can choose to use US url or not
 "settingsviews_useUSDexcomShareurl" = "Benutzung von Dexcom US Server?";
@@ -297,3 +297,9 @@
 "settingsviews_daysToUseStatisticsMessage" = "Maximale Tage anhand dessen versucht wird den Verlauf zu berechnen?\n\n(Bei 0 wird heute ab Mitternacht berechnet)";
 "settingsviews_useStandardStatisticsRange" = "Standardbereich verwenden?";
 "settingsviews_useIFCCA1C" = "HbA1c in mmols/mol anzeigen?";
+
+"settingsviews_showClockWhenScreenIsLocked" = "Uhr anzeigen wenn gesperrt?";
+
+"settingsviews_sectiontitlesensorcountdown" = "Zeit bis Sensorende";
+"settingsviews_showSensorCountdown" = "Zeit bis Sensorende anzeigen?";
+"settingsviews_showSensorCountdownAlternativeGraphics" = "Alternative Symbole verwenden?";

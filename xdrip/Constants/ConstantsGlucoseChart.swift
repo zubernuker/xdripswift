@@ -76,6 +76,12 @@ enum ConstantsGlucoseChart {
 
     /// glucose colors - for values between highMarkValue and urgentHighMarkValue or between urgentLowMarkValue and lowMarkValue
     static let glucoseNotUrgentRangeColor = UIColor.yellow
+    
+    /// calibration circle color (inside circle)
+    static let calibrationInsideColor = UIColor.red
+    
+    /// calibration circle border color (outside circle)
+    static let calibrationOutsideColor = UIColor.white
 
     /// labels width for vertical axis
     static let yAxisLabelsWidth: CGFloat = 30
@@ -104,6 +110,12 @@ enum ConstantsGlucoseChart {
     static let glucoseCircleDiameter12h: CGFloat = 4
     static let glucoseCircleDiameter24h: CGFloat = 3
     
+    /// diameter of the circle for calibration chart points (outer circle)
+    static let calibrationCircleScaleOuter: CGFloat = 1.9
+    
+    /// diameter of the circle for calibration chart points (inner circle)
+    static let calibrationCircleScaleInner: CGFloat = 1.4
+    
     /// when user pans the chart, when ending the gesture, deceleration is done. At regular intervals the chart needs to be redrawn. This is the interval in seconds
     static let decelerationTimerValueInSeconds = 0.030
     
@@ -115,5 +127,8 @@ enum ConstantsGlucoseChart {
 
     /// dateformat for minutesAgo label when user is panning the chart back in time. The label will show the timestamp of the latest shown value in the chart
     static let dateFormatLatestChartPointWhenPanning = "E d MMM HH:mm"
+    
+    /// dateformat for the date label in the 24 hours static landscape chart
+    static let dateFormatLandscapeChart = "EEEE dd/MM/yyyy"
     
 }
